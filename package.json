@@ -9,6 +9,9 @@
   "files": [
     "dist"
   ],
+  "bin": {
+    "triforce-sarc": "dist/command.js"
+  },
   "scripts": {
     "build": "rimraf ./dist && tsc -p ./tsconfig.build.json && swc ./dist -d ./dist",
     "sarc": "node ./dist/command.js",

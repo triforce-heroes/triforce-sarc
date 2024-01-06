@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+import{program as t}from"commander";import{ExtractCommand as e}from"./commands/ExtractCommand.js";import{RebuildCommand as o}from"./commands/RebuildCommand.js";t.command("rebuild").description("rebuild to SARC file").argument("<input>","directory to be rebuilded").argument("[output]","output file").option("-b, --base <file>","base SARC file").action(o),t.command("extract").description("extract SARC file to a directory").argument("<input>","SARC file to be extracted").argument("[output]","output directory").action(e),t.parse();

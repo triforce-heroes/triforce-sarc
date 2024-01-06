@@ -1,0 +1,1 @@
+import{parseHeader as r}from"./parser/parseHeader.js";import{parseEntries as e}from"./parser/parseNodes.js";export function extract(o){return e(o,r(o))}
