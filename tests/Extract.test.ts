@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import * as core from "@triforce-heroes/triforce-core";
+import * as core from "@triforce-heroes/triforce-core/Console";
 import { describe, expect, it, vi } from "vitest";
 
 import { extract } from "../src/Extract.js";

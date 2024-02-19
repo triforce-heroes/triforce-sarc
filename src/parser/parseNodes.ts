@@ -1,4 +1,4 @@
-import { BufferConsumer } from "@triforce-heroes/triforce-core";
+import { BufferConsumer } from "@triforce-heroes/triforce-core/BufferConsumer";
 
 import { DataHeader } from "./parseHeader.js";
 

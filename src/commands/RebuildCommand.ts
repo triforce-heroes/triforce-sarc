@@ -1,7 +1,8 @@
 import { existsSync, readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 
-import { fatal, normalize } from "@triforce-heroes/triforce-core";
+import { fatal } from "@triforce-heroes/triforce-core/Console";
+import { normalize } from "@triforce-heroes/triforce-core/Path";
 
 import { extract } from "../Extract.js";
 import { FileSystem } from "../FileSystem.js";
