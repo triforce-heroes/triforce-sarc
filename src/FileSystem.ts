@@ -6,7 +6,7 @@ import { hash } from "./utils/hash.js";
 const DEFAULT_KEY = 0x65;
 
 export class FileSystem {
-  private readonly entries = new Map<string, Buffer>();
+  public constructor(private readonly entries = new Map<string, Buffer>()) {}
 
   public set(name: string, buffer: Buffer) {
     this.entries.set(name, buffer);
