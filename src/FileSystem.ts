@@ -8,6 +8,10 @@ const DEFAULT_KEY = 0x65;
 export class FileSystem {
   public constructor(private readonly entries = new Map<string, Buffer>()) {}
 
+  public get(name: string) {
+    return this.entries.get(name);
+  }
+
   public set(name: string, buffer: Buffer) {
     this.entries.set(name, buffer);
   }

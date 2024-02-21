@@ -10,10 +10,18 @@ describe("class FileSystem", () => {
 
     sample.set("Bogus", Buffer.from(""));
 
+    expect(sample.get("Bogus")).toStrictEqual(Buffer.from(""));
+
     sample.set("Example.txt", Buffer.from("Before!"));
     sample.set("Example.txt", Buffer.from("Hello World!"));
 
+    expect(sample.get("Example.txt")).toStrictEqual(
+      Buffer.from("Hello World!"),
+    );
+
     sample.delete("Bogus");
+
+    expect(sample.get("Bogus")).toBeUndefined();
 
     const build = sample.build();
 
