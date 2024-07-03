@@ -11,11 +11,12 @@ export interface DataHeader {
 }
 
 export function parseHeader(buffer: Buffer) {
-  const consumer = new BufferConsumer(
-    buffer,
-    undefined,
-    ByteOrder.LITTLE_ENDIAN,
-  );
+  const byteOrderMask =
+    buffer.readUInt16LE(6) === 0xff_fe
+      ? ByteOrder.BIG_ENDIAN
+      : ByteOrder.LITTLE_ENDIAN;
+
+  const consumer = new BufferConsumer(buffer, undefined, byteOrderMask);
   const magic = consumer.readString(4);
 
   if (magic !== "SARC") {
@@ -23,11 +24,7 @@ export function parseHeader(buffer: Buffer) {
   }
 
   consumer.skip(2); // Header length (always 0x14).
-
-  const byteOrderMask =
-    consumer.readInt16() === 0xff_fe
-      ? ByteOrder.BIG_ENDIAN
-      : ByteOrder.LITTLE_ENDIAN;
+  consumer.skip(2); // Byte order mask.
 
   const length = consumer.readUnsignedInt32();
   const dataOffset = consumer.readUnsignedInt32();

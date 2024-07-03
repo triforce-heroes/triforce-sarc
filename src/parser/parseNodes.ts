@@ -14,16 +14,15 @@ function parseEntry(
   headerDataOffset: number,
 ): DataEntry {
   consumer.skip(4); // Name hash.
-  consumerNames.seek(consumer.readUnsignedInt16() * 4);
-  consumer.skip(2); // Always (0x01).
+  consumerNames.seek((consumer.readUnsignedInt32() - 0x01_00_00_00) * 4);
 
-  return {
-    name: consumerNames.readNullTerminatedString(),
-    data: buffer.subarray(
-      headerDataOffset + consumer.readUnsignedInt32(),
-      headerDataOffset + consumer.readUnsignedInt32(),
-    ),
-  };
+  const name = consumerNames.readNullTerminatedString();
+  const data = buffer.subarray(
+    headerDataOffset + consumer.readUnsignedInt32(),
+    headerDataOffset + consumer.readUnsignedInt32(),
+  );
+
+  return { name, data };
 }
 
 export function parseEntries(buffer: Buffer, header: DataHeader) {

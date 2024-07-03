@@ -20,8 +20,8 @@ export class FileSystem {
     this.entries.delete(name);
   }
 
-  public build() {
-    const fatBuilder = new BufferBuilder(ByteOrder.LITTLE_ENDIAN);
+  public build(byteOrder = ByteOrder.LITTLE_ENDIAN) {
+    const fatBuilder = new BufferBuilder(byteOrder);
     const fatLength = 0x0c;
 
     fatBuilder.writeString("SFAT");
@@ -29,12 +29,13 @@ export class FileSystem {
     fatBuilder.writeUnsignedInt16(this.entries.size);
     fatBuilder.writeUnsignedInt32(DEFAULT_KEY);
 
-    const entriesBuilder = new BufferBuilder(ByteOrder.LITTLE_ENDIAN);
-    const namesBuilder = new BufferBuilder(ByteOrder.LITTLE_ENDIAN);
-    const dataBuilder = new BufferBuilder(ByteOrder.LITTLE_ENDIAN);
+    const entriesBuilder = new BufferBuilder(byteOrder);
+    const namesBuilder = new BufferBuilder(byteOrder);
+    const dataBuilder = new BufferBuilder(byteOrder);
 
     namesBuilder.writeString("SFNT");
-    namesBuilder.writeUnsignedInt32(0x08);
+    namesBuilder.writeUnsignedInt16(0x08);
+    namesBuilder.writeUnsignedInt16(0);
 
     const entriesSorted = [...this.entries.entries()].sort(
       (a, b) => hash(a[0], DEFAULT_KEY) - hash(b[0], DEFAULT_KEY),
@@ -42,8 +43,9 @@ export class FileSystem {
 
     for (const [name, buffer] of entriesSorted) {
       entriesBuilder.writeUnsignedInt32(hash(name, DEFAULT_KEY));
-      entriesBuilder.writeUnsignedInt16((namesBuilder.length - 8) / 4);
-      entriesBuilder.writeUnsignedInt16(0x01_00);
+      entriesBuilder.writeUnsignedInt32(
+        (namesBuilder.length - 8) / 4 + 0x01_00_00_00,
+      );
       entriesBuilder.writeUnsignedInt32(dataBuilder.length);
       entriesBuilder.writeUnsignedInt32(dataBuilder.length + buffer.length);
 
@@ -65,7 +67,7 @@ export class FileSystem {
       entriesBuilder.length +
       namesBuilder.length;
 
-    const builder = new BufferBuilder(ByteOrder.LITTLE_ENDIAN);
+    const builder = new BufferBuilder(byteOrder);
 
     builder.writeString("SARC");
     builder.writeUnsignedInt16(headerLength);
