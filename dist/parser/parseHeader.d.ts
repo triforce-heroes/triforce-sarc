@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 import { ByteOrder } from "@triforce-heroes/triforce-core/types/ByteOrder";
 export interface DataHeader {
     byteOrderMask: ByteOrder;
